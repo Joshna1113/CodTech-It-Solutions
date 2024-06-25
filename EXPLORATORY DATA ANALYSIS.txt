@@ -1,0 +1,62 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load the Titanic dataset
+url = "https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/stuff/titanic.csv"
+titanic = pd.read_csv(url)
+
+# Display the first few rows of the dataset
+titanic.head()
+
+# Check for missing values
+missing_values = titanic.isnull().sum()
+missing_values
+
+# Summary statistics for numerical variables
+titanic.describe()
+
+# Histograms for numerical variables
+numerical_vars = ['Age', 'Fare']
+titanic[numerical_vars].hist(bins=20, figsize=(14, 6), layout=(1, 2))
+plt.show()
+
+# Bar plots for categorical variables
+categorical_vars = ['Survived', 'Pclass', 'Sex', 'Embarked']
+fig, axs = plt.subplots(2, 2, figsize=(14, 10))
+
+for var, ax in zip(categorical_vars, axs.ravel()):
+    sns.countplot(data=titanic, x=var, ax=ax)
+
+plt.tight_layout()
+plt.show()
+
+# Correlation heatmap for numerical variables
+corr_matrix = titanic.corr()
+plt.figure(figsize=(10, 6))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1)
+plt.show()
+
+# Pairplot for selected numerical variables
+sns.pairplot(titanic, vars=['Age', 'Fare', 'Survived'], hue='Survived')
+plt.show()
+
+# Box plots to detect outliers in numerical variables
+fig, axs = plt.subplots(1, 2, figsize=(14, 6))
+
+for var, ax in zip(numerical_vars, axs.ravel()):
+    sns.boxplot(data=titanic, y=var, ax=ax)
+
+plt.tight_layout()
+plt.show()
+
+# Detailed analysis of 'Survived' variable by other categorical variables
+fig, axs = plt.subplots(2, 2, figsize=(14, 10))
+
+for var, ax in zip(categorical_vars[1:], axs.ravel()):
+    sns.countplot(data=titanic, x=var, hue='Survived', ax=ax)
+
+plt.tight_layout()
+plt.show()
+
